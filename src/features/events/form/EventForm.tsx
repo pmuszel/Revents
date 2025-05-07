@@ -1,19 +1,11 @@
 import { users } from "../../../lib/data/sampleData";
+import { useAppDispatch, useAppSelector } from "../../../lib/stores/store";
 import type { AppEvent } from "../../../lib/types";
+import { closeForm, createEvent, updateEvent } from "../eventSlice";
 
-type Props = {
-  setFormOpen: (isOpen: boolean) => void;
-  createEvent: (event: AppEvent) => void;
-  updateEvent: (event: AppEvent) => void;
-  selectedEvent: AppEvent | null;
-};
-
-export default function EventForm({
-  setFormOpen,
-  createEvent,
-  updateEvent,
-  selectedEvent,
-}: Props) {
+export default function EventForm() {
+  const dispatch = useAppDispatch();
+  const selectedEvent = useAppSelector((state) => state.event.selectedEvent);
   const initialValues = selectedEvent ?? {
     title: "",
     category: "",
@@ -28,27 +20,31 @@ export default function EventForm({
     console.log("Form data", data);
 
     if (selectedEvent) {
-      updateEvent({
-        ...selectedEvent,
-        ...data,
-      });
+      dispatch(
+        updateEvent({
+          ...selectedEvent,
+          ...data,
+        })
+      );
     } else {
-      createEvent({
-        ...data,
-        id: crypto.randomUUID(),
-        hostUid: users[0].uid,
-        attendees: [
-          {
-            id: users[0].uid,
-            displayName: users[0].displayName,
-            photoURL: users[0].photoURL,
-            isHost: true,
-          },
-        ],
-      });
+      dispatch(
+        createEvent({
+          ...data,
+          id: crypto.randomUUID(),
+          hostUid: users[0].uid,
+          attendees: [
+            {
+              id: users[0].uid,
+              displayName: users[0].displayName,
+              photoURL: users[0].photoURL,
+              isHost: true,
+            },
+          ],
+        })
+      );
     }
 
-    setFormOpen(false);
+    dispatch(closeForm());
   };
 
   return (
@@ -106,7 +102,7 @@ export default function EventForm({
           <button
             type="button"
             className="btn btn-neutral"
-            onClick={() => setFormOpen(false)}
+            onClick={() => dispatch(closeForm())}
           >
             Cancel
           </button>

@@ -1,14 +1,15 @@
+import { useAppDispatch } from "../../../lib/stores/store";
 import type { AppEvent } from "../../../lib/types";
+import { deleteEvent, toggleForm } from "../eventSlice";
 import EventAttendees from "./EventAttendees";
 
 type Props = {
   event: AppEvent;
-  selectEvent: (event: AppEvent) => void;
-  deleteEvent: (eventId: string) => void;
 };
 
-export default function EventCard({ event, selectEvent, deleteEvent }: Props) {
+export default function EventCard({ event }: Props) {
   const host = event.attendees.find((attendee) => attendee.isHost);
+  const dispath = useAppDispatch();
   return (
     <div className="card card-border bg-base-100 w-full">
       <div className="card-body">
@@ -31,13 +32,13 @@ export default function EventCard({ event, selectEvent, deleteEvent }: Props) {
         <div className="card-actions flex">
           <div className="flex flex-1">{event.description}</div>
           <button
-            onClick={() => deleteEvent(event.id)}
+            onClick={() => dispath(deleteEvent(event.id))}
             className="btn btn-error"
           >
             Delete
           </button>
           <button
-            onClick={() => selectEvent(event)}
+            onClick={() => dispath(toggleForm(event))}
             className="btn btn-primary"
           >
             View
