@@ -1,0 +1,10 @@
+_schema-version: "3.2"
+ID: revents
+version: 0.0.3
+provider: SUPREMIS
+modules:
+  - name: revents
+    type: single-page-app
+    path: dist
+parameters:
+  deploy_mode: b1-webclient
