@@ -1,11 +1,19 @@
+import { useNavigate, useParams } from "react-router";
 import { users } from "../../../lib/data/sampleData";
 import { useAppDispatch, useAppSelector } from "../../../lib/stores/store";
 import type { AppEvent } from "../../../lib/types";
-import { closeForm, createEvent, updateEvent } from "../eventSlice";
+import { createEvent, selectEvent, updateEvent } from "../eventSlice";
+import { useEffect, useRef } from "react";
 
 export default function EventForm() {
   const dispatch = useAppDispatch();
   const selectedEvent = useAppSelector((state) => state.event.selectedEvent);
+  const navigate = useNavigate();
+
+  const { id } = useParams<{ id: string }>();
+
+  const formRef = useRef<HTMLFormElement>(null);
+
   const initialValues = selectedEvent ?? {
     title: "",
     category: "",
@@ -14,6 +22,15 @@ export default function EventForm() {
     city: "",
     venue: "",
   };
+
+  useEffect(() => {
+    if (id) {
+      dispatch(selectEvent(id));
+    } else {
+      dispatch(selectEvent(null));
+      formRef.current?.reset();
+    }
+  }, [id, dispatch]);
 
   const onSubmit = (formData: FormData) => {
     const data = Object.fromEntries(formData.entries()) as unknown as AppEvent;
@@ -26,11 +43,14 @@ export default function EventForm() {
           ...data,
         })
       );
+
+      navigate(`/events/${selectedEvent.id}`);
     } else {
+      const eventId = crypto.randomUUID();
       dispatch(
         createEvent({
           ...data,
-          id: crypto.randomUUID(),
+          id: eventId,
           hostUid: users[0].uid,
           attendees: [
             {
@@ -42,17 +62,29 @@ export default function EventForm() {
           ],
         })
       );
+
+      navigate(`/events/${eventId}`);
     }
 
-    dispatch(closeForm());
+    // dispatch(closeForm());
   };
+
+  // useEffect(() => {
+  //   if (!selectedEvent) {
+  //     formRef.current?.reset();
+  //   }
+  // }, [selectedEvent]);
 
   return (
     <div className="card bg-base-100 p-4 flex flex-col gap-3 w-full">
       <h3 className="text-2xl font-semibild text-center text-primary">
         {selectedEvent ? "Edit" : "Create"} event
       </h3>
-      <form action={onSubmit} className="flex flex-col gap-3 w-full">
+      <form
+        action={onSubmit}
+        ref={formRef}
+        className="flex flex-col gap-3 w-full"
+      >
         <input
           defaultValue={initialValues.title}
           name="title"
@@ -102,7 +134,8 @@ export default function EventForm() {
           <button
             type="button"
             className="btn btn-neutral"
-            onClick={() => dispatch(closeForm())}
+            onClick={() => navigate(-1)}
+            // onClick={() => dispatch(closeForm())}
           >
             Cancel
           </button>
