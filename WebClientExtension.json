@@ -1,0 +1,19 @@
+{
+  "tiles": [
+    {
+      "text": "Revents",
+      "icon": "sap-icon://customize",
+      "url": "index.html",
+      "subtitle": "Web Client React Application Extension",
+      "size": "1x1",
+      "dynamicContent": {
+        "repositories": [
+          {
+            "converter": "kpiNumber",
+            "endpoint": "/b1s/v2/PurchaseOrders/$count"
+          }
+        ]
+      }
+    }
+  ]
+}

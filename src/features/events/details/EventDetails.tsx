@@ -12,7 +12,9 @@ export default function EventDetails() {
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
+    console.log("1");
     if (id) {
+      console.log(id);
       dispatch(selectEvent(id));
     }
 
