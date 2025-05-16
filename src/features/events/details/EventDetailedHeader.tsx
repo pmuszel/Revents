@@ -1,11 +1,7 @@
 import { Link } from "react-router";
-import { useAppSelector } from "../../../lib/stores/store";
+import type { AppEvent } from "../../../lib/types";
 
-export default function EventDetailedHeader() {
-  const event = useAppSelector((state) => state.event.selectedEvent);
-
-  if (!event) return <div>Event not fount</div>;
-
+export default function EventDetailedHeader({ event }: { event: AppEvent }) {
   const host = event.attendees.find((attendee) => attendee.isHost);
 
   return (

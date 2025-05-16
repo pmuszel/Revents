@@ -1,9 +1,8 @@
 import { Fragment } from "react";
-import { useAppSelector } from "../../../lib/stores/store";
 
-export default function EventDetailedSidebar() {
-  const event = useAppSelector((state) => state.event.selectedEvent);
+import type { AppEvent } from "../../../lib/types";
 
+export default function EventDetailedSidebar({ event }: { event: AppEvent }) {
   return (
     <div className="card bg-base-100">
       <div className="card-title justify-center bg-gradient-to-r from-primary to-black py-2 text-white rounded-t-lg">

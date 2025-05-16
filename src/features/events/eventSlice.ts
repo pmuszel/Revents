@@ -1,6 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { AppEvent } from "../../lib/types";
-import { events } from "../../lib/data/sampleData";
+import type { AppEvent, FirestoreAppEvent } from "../../lib/types";
 
 type State = {
   events: AppEvent[];
@@ -9,7 +8,7 @@ type State = {
 };
 
 const initialState: State = {
-  events: events,
+  events: [],
   selectedEvent: null,
   formOpen: false,
 };
@@ -35,8 +34,23 @@ export const eventSlice = createSlice({
   name: "event",
   initialState,
   reducers: {
-    setEvents: (state, action: PayloadAction<AppEvent[]>) => {
-      state.events = action.payload;
+    setEvents: {
+      reducer: (state, action: PayloadAction<AppEvent[]>) => {
+        state.events = action.payload;
+      },
+      prepare: (events: FirestoreAppEvent[]) => {
+        const mapped = events.map((e) => {
+          return {
+            ...e,
+            // date: (e.date as unknown as Timestamp).toDate().toISOString(),
+            date: e.date.toDate().toISOString(),
+          };
+        });
+
+        return {
+          payload: mapped,
+        };
+      },
     },
     createEvent: (state, action: PayloadAction<AppEvent>) => {
       state.events.push(action.payload);
@@ -51,9 +65,22 @@ export const eventSlice = createSlice({
         (event) => event.id !== action.payload
       );
     },
-    selectEvent: (state, action: PayloadAction<string | null>) => {
-      state.selectedEvent =
-        state.events.find((x) => x.id === action.payload) ?? null;
+    // selectEvent: (state, action: PayloadAction<string | null>) => {
+    //   state.selectedEvent =
+    //     state.events.find((x) => x.id === action.payload) ?? null;
+    // },
+    selectEvent: {
+      reducer: (state, action: PayloadAction<AppEvent>) => {
+        state.selectedEvent = action.payload;
+      },
+      prepare: (event: FirestoreAppEvent) => {
+        return {
+          payload: {
+            ...event,
+            date: event.date.toDate().toISOString(),
+          },
+        };
+      },
     },
     // openForm: (state) => {
     //   state.formOpen = true;
