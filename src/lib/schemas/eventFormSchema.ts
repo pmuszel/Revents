@@ -15,13 +15,15 @@ export const eventFormSchema = z.object({
   title: requiredString("Title"),
   category: requiredString("Category"),
   description: requiredString("Description").min(5, "Description is too short"),
-  date: requiredString("Date").refine(
-    (value) => {
-      const selectedDate = new Date(value);
-      return selectedDate > new Date();
-    },
-    { message: "Date must be in the future" }
-  ),
+  date: requiredString("Date"),
+
+  // refine(
+  //   (value) => {
+  //     const selectedDate = new Date(value);
+  //     return selectedDate > new Date();
+  //   },
+  //   { message: "Date must be in the future" }
+  // ),
   city: z.string().optional(),
   venue: venueSchema,
 });

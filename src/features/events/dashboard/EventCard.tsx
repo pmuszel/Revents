@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import type { AppEvent } from "../../../lib/types";
 import EventAttendees from "./EventAttendees";
-import { UseFirestoreActions } from "../../../lib/hooks/useFirestoreActions";
+import { useFirestoreActions } from "../../../lib/hooks/useFirestoreActions";
 
 type Props = {
   event: AppEvent;
@@ -9,7 +9,7 @@ type Props = {
 
 export default function EventCard({ event }: Props) {
   const host = event.attendees.find((attendee) => attendee.isHost);
-  const { remove, submitting } = UseFirestoreActions({ path: "events" });
+  const { remove, submitting } = useFirestoreActions({ path: "events" });
 
   return (
     <div className="card card-border bg-base-100 w-full">

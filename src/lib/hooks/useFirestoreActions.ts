@@ -13,7 +13,7 @@ type Options = {
   path: string;
 };
 
-export const UseFirestoreActions = <T extends DocumentData>({
+export const useFirestoreActions = <T extends DocumentData>({
   path,
 }: Options) => {
   const [submitting, setSubmitting] = useState(false);
@@ -24,6 +24,18 @@ export const UseFirestoreActions = <T extends DocumentData>({
       const ref = doc(collection(db, path));
       await setDoc(ref, data);
       return ref;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const setDocument = async (id: string, data: T) => {
+    try {
+      setSubmitting(true);
+      await setDoc(doc(db, path, id), data);
     } catch (error) {
       console.error(error);
       throw error;
@@ -58,5 +70,5 @@ export const UseFirestoreActions = <T extends DocumentData>({
     }
   };
 
-  return { create, update, remove, submitting };
+  return { create, update, remove, setDocument, submitting };
 };

@@ -14,7 +14,7 @@ import SelectInput from "../../../app/shared/components/SelectInput";
 import { categoryOptions } from "./categoryOptions";
 import PlaceInput from "../../../app/shared/components/PlaceInput";
 import { useDocument } from "../../../lib/hooks/useDocument";
-import { UseFirestoreActions } from "../../../lib/hooks/useFirestoreActions";
+import { useFirestoreActions } from "../../../lib/hooks/useFirestoreActions";
 import { Timestamp } from "firebase/firestore";
 import { handleError } from "../../../lib/util/util";
 
@@ -26,7 +26,7 @@ export default function EventForm() {
     id,
   });
 
-  const { create, update, submitting } = UseFirestoreActions<FirestoreAppEvent>(
+  const { create, update, submitting } = useFirestoreActions<FirestoreAppEvent>(
     {
       path: "events",
     }
@@ -150,7 +150,7 @@ export default function EventForm() {
             control={control}
             name="date"
             type="datetime-local"
-            min={new Date()}
+            // min={new Date()}
             label="Date"
           />
         </div>

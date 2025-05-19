@@ -5,6 +5,7 @@ export type AppUser = {
   displayName: string;
   email: string;
   photoURL?: string;
+  providerId: string;
 };
 
 export type AppEvent = {
