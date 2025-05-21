@@ -1,5 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 import { toast } from "react-toastify";
+import { format } from "date-fns";
 
 export function debounce<T extends unknown[], U>(
   callback: (...args: T) => PromiseLike<U> | U,
@@ -42,3 +43,8 @@ export function handleError(error: unknown) {
   }
   console.log(error);
 }
+
+export const formatDateTime = (date: string) => {
+  if (!date) return;
+  return format(new Date(date), "dd-MM-yyyy HH:mm");
+};

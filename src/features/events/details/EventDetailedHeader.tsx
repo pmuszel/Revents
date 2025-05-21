@@ -1,33 +1,81 @@
 import { Link } from "react-router";
 import type { AppEvent } from "../../../lib/types";
+import { useEvent } from "../../../lib/hooks/useEvent";
+import clsx from "clsx";
+import { XCircleIcon } from "@heroicons/react/24/outline";
+import { formatDateTime } from "../../../lib/util/util";
+import Countdown from "../../../app/shared/components/Countdown";
 
 export default function EventDetailedHeader({ event }: { event: AppEvent }) {
-  const host = event.attendees.find((attendee) => attendee.isHost);
-
+  const {
+    host,
+    isHost,
+    isGoing,
+    toggleAttendence,
+    toggleCancel,
+    shouldShowCountdown,
+  } = useEvent(event);
   return (
     <div className="card bg-base-100 r">
-      <figure className="h-64 brightness-50 rounded-lg">
+      <figure className="h-64 rounded-lg">
         <img
-          className="w-full object-cover"
+          className="w-full object-cover brightness-50"
           src={`/categoryImages/${event.category}.jpg`}
           alt="event category image"
         />
+        {event.isCancelled ? (
+          <div className="alert alert-error absolute top-5 right-5">
+            <XCircleIcon className="h-6 w-6" />
+            <span>This event has been cancelled</span>
+          </div>
+        ) : (
+          <>
+            {shouldShowCountdown && (
+              <div className="absolute top-5 right-5">
+                <Countdown date={event.date} />
+              </div>
+            )}
+          </>
+        )}
       </figure>
       <div className="card-body text-white justify-end absolute bottom-0 w-full">
         <div className="flex justify-between">
           <div>
             <h2 className="card-title text-4xl">{event.title}</h2>
-            <p>{event.date}</p>
+            <p>{formatDateTime(event.date)}</p>
             <p>Hosted by {host?.displayName}</p>
           </div>
-          <div className="flex justify-denter gap-4">
+          <div className="flex justify-center gap-4">
             <div className="flex flex-col justify-end">
-              <Link to={`/manage/${event.id}`} className="btn btn-secondary">
-                Manage
-              </Link>
-            </div>
-            <div className="flex flex-col justify-end">
-              <button className="btn btn-primary">Join event</button>
+              {isHost ? (
+                <div className="flex gap-3">
+                  <button
+                    onClick={toggleCancel}
+                    className={clsx("btn", {
+                      "btn-success": event.isCancelled,
+                      "btn-error": !event.isCancelled,
+                    })}
+                  >
+                    {event.isCancelled ? "Reactivate event" : "Cancel event"}
+                  </button>
+                  <Link to={`/manage/${event.id}`} className="btn btn-primary">
+                    Manage event
+                  </Link>
+                </div>
+              ) : (
+                <div className="flex flex-col justify-end">
+                  <button
+                    disabled={event.isCancelled}
+                    onClick={toggleAttendence}
+                    className={clsx("btn", {
+                      "btn-primary": !isGoing,
+                      "btn-error": isGoing,
+                    })}
+                  >
+                    {isGoing ? "Cancel attendance" : "Join event"}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

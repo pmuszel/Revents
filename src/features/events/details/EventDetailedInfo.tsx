@@ -4,6 +4,7 @@ import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import MapComponent from "../../../app/shared/components/MapComponent";
 import type { AppEvent } from "../../../lib/types";
+import { formatDateTime } from "../../../lib/util/util";
 
 export default function EventDetailedInfo({ event }: { event: AppEvent }) {
   const [mapOpen, setMapOpen] = useState(false);
@@ -19,7 +20,7 @@ export default function EventDetailedInfo({ event }: { event: AppEvent }) {
         </div>
         <div className="flex items-center gap-x-3 border-b border-neutral-300 py-3 pl-3">
           <CalendarIcon className="size-8" />
-          <span>{event.date}</span>
+          <span>{formatDateTime(event.date)}</span>
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-x-3 py-3 pl-3">

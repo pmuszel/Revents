@@ -2,7 +2,7 @@ import { UserIcon } from "@heroicons/react/24/outline";
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import { PowerIcon } from "@heroicons/react/24/outline";
 import { useAppSelector } from "../../../lib/stores/store";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../lib/firebase/firebase";
 
@@ -35,10 +35,13 @@ export default function UserMenu() {
         className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
       >
         <li>
-          <div className="flex gap-3 items-center">
+          <Link
+            className="flex gap-3 items-center"
+            to={`/profiles/${user?.uid}`}
+          >
             <UserIcon className="size-6" />
             My profile
-          </div>
+          </Link>
         </li>
         <li>
           <div className="flex gap-3 items-center">
