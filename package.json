@@ -23,6 +23,7 @@
     "leaflet": "^1.9.4",
     "motion": "^12.9.7",
     "react": "^19.1.0",
+    "react-calendar": "^5.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.56.3",
     "react-leaflet": "^5.0.0",

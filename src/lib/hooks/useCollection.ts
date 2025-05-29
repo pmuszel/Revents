@@ -1,4 +1,4 @@
-import { collection, onSnapshot, type DocumentData } from "firebase/firestore";
+import { onSnapshot, type DocumentData } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "../stores/store";
 import { useCallback, useRef, useSyncExternalStore } from "react";
 import {
@@ -6,9 +6,9 @@ import {
   setError,
   setLoading,
 } from "../firebase/firestoreSlice";
-import { db } from "../firebase/firebase";
 import { toast } from "react-toastify";
 import { convertTimestamps } from "../util/util";
+import { getQuery } from "../firebase/getQuery";
 
 type Options = {
   path: string;
@@ -24,6 +24,7 @@ export const useCollection = <T extends DocumentData>({
     (state) => state.firestore.collection[path]
   ) as T[];
   const loading = useAppSelector((state) => state.firestore.loading);
+  const options = useAppSelector((state) => state.firestore.options[path]);
   const hasSetLoading = useRef(false);
   const loadedInitial = useRef(false);
 
@@ -35,10 +36,18 @@ export const useCollection = <T extends DocumentData>({
       hasSetLoading.current = true;
     }
 
-    const colRef = collection(db, path);
+    const query = getQuery(path, options);
+
+    // const colRef = collection(db, path);
+
+    // const q = query(
+    //   colRef,
+    //   where("date", ">=", new Date()),
+    //   orderBy("date", "asc")
+    // );
 
     const unsubscribe = onSnapshot(
-      colRef,
+      query,
       (snapshot) => {
         const data: T[] = [];
         snapshot.forEach((doc) => {
@@ -61,7 +70,7 @@ export const useCollection = <T extends DocumentData>({
     return () => {
       unsubscribe();
     };
-  }, [dispatch, listen, path]);
+  }, [dispatch, listen, path, options]);
 
   useSyncExternalStore(subscribeToCollection, () => collectionData);
   return {

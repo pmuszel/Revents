@@ -1,12 +1,16 @@
 import EventCard from "./EventCard";
-import Counter from "../../counter/Counter";
 import { useCollection } from "../../../lib/hooks/useCollection";
 import type { AppEvent } from "../../../lib/types";
+import EventFilters from "./EventFilters";
+import EmptyState from "../../../app/shared/components/EmptyState";
+import { useEventFilters } from "../../../lib/hooks/useEventFilters";
 
 export default function EventDashboard() {
   const { data: appEvents, loading } = useCollection<AppEvent>({
     path: "events",
   });
+
+  const { filter, setFilter, resetFilters } = useEventFilters();
 
   // const dispatch = useAppDispatch();
   // const { events: appEvents } = useAppSelector((state) => state.event);
@@ -32,15 +36,23 @@ export default function EventDashboard() {
 
   return (
     <div className="flex flex-row w-full gap-6">
-      <div className="w-3/5">
+      <div className="w-2/3">
         <div className="flex flex-col gap-4">
-          {appEvents?.map((event) => (
-            <EventCard key={event.id} event={event} />
-          ))}
+          {!loading && appEvents?.length === 0 ? (
+            <EmptyState
+              message="No events for this filter"
+              onReset={resetFilters}
+            />
+          ) : (
+            appEvents?.map((event) => (
+              <EventCard key={event.id} event={event} />
+            ))
+          )}
         </div>
       </div>
-      <div className="w-2/5 overflow-hidden">
-        <Counter />
+      <div className="w-1/3 overflow-hidden sticky top-[96px] self-start">
+        {/* <Counter /> */}
+        <EventFilters filter={filter} setFilter={setFilter} />
       </div>
     </div>
   );
