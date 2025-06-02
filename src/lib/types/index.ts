@@ -99,3 +99,12 @@ export type Filter = {
   query: string;
   startDate: string;
 };
+
+export type ChatComment = {
+  id: string;
+  displayName: string;
+  photoURL?: string;
+  uid: string;
+  text: string;
+  date: string;
+};
