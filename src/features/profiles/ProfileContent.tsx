@@ -19,6 +19,10 @@ export default function ProfileContent({ profile }: { profile: Profile }) {
   const [editMode, setEditMode] = useState(false);
   const currenUser = useAppSelector((state) => state.account.user);
 
+  const followOptions = ["all", "following", "followers"];
+
+  const [followFilter, setFollowFilter] = useState(followOptions[0]);
+
   const items = [
     {
       key: "about",
@@ -58,7 +62,7 @@ export default function ProfileContent({ profile }: { profile: Profile }) {
       case "events":
         return <ProfileEvents profile={profile} />;
       case "members":
-        return <ProfileMembers />;
+        return <ProfileMembers profile={profile} followFilter={followFilter} />;
       default:
         return (
           <ProfileAbout
@@ -101,12 +105,35 @@ export default function ProfileContent({ profile }: { profile: Profile }) {
           <div className="card-title text-2xl ml-3 py-1 text-primary">
             {selected.label}
           </div>
-          <button
-            onClick={() => setEditMode(!editMode)}
-            className="btn btn-outline btn-primary"
-          >
-            {editMode ? "Cancel" : "Edit"}
-          </button>
+          {canEdit && (
+            <button
+              onClick={() => setEditMode(!editMode)}
+              className="btn btn-outline btn-primary"
+            >
+              {canEdit ? "Cancel" : "Edit"}
+            </button>
+          )}
+          {selectedItem === "members" && (
+            <div className="tabs tabs-box">
+              {followOptions.map((o) => (
+                <input
+                  key={o}
+                  onChange={() => setFollowFilter(o)}
+                  checked={followFilter === o}
+                  type="radio"
+                  className="tab"
+                  name={o}
+                  aria-label={
+                    o === "all"
+                      ? o.toUpperCase()
+                      : profile.displayName.toUpperCase() +
+                        "'S " +
+                        o.toUpperCase()
+                  }
+                />
+              ))}
+            </div>
+          )}
         </div>
         <div className="divider my-1"></div>
         <AnimatePresence mode="wait">

@@ -1,7 +1,9 @@
+import { useFollowing } from "../../../lib/hooks/useFollowing";
 import type { AppEvent } from "../../../lib/types";
 import { Link } from "react-router";
 
 export default function EventDetailedSidebar({ event }: { event: AppEvent }) {
+  const { followingIds } = useFollowing();
   return (
     <div className="card bg-base-100">
       <div className="card-title justify-center bg-gradient-to-r from-primary to-black py-2 text-white rounded-t-lg">
@@ -21,7 +23,14 @@ export default function EventDetailedSidebar({ event }: { event: AppEvent }) {
                       />
                     </div>
                   </div>
-                  <span className="text-2xl">{attendee.displayName}</span>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-2xl">{attendee.displayName}</span>
+                    {followingIds.includes(attendee.id) && (
+                      <span className="badge badge-primary badge-soft">
+                        Following
+                      </span>
+                    )}
+                  </div>
                 </div>
                 {attendee.isHost && (
                   <div className="badge badge-info">Host</div>
