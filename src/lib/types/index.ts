@@ -9,7 +9,7 @@ export type AppUser = {
   displayName: string;
   email: string;
   photoURL?: string;
-  providerId: string;
+  providerId?: string;
 };
 
 export type Profile = {
@@ -33,7 +33,7 @@ export type AppEvent = {
   latitude: number;
   longitude: number;
   hostUid: string;
-  isCancelled: boolean;
+  isCancelled?: boolean;
   attendees: Attendee[];
   attendeeIds: string[];
 };
@@ -81,6 +81,8 @@ export type Address = {
 export type CollectionOptions = {
   queries?: QueryOptions[];
   sort: SortOptions;
+  limit?: number;
+  pageNumber?: number;
 };
 
 export type QueryOptions = {

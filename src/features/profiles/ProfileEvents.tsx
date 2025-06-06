@@ -1,26 +1,23 @@
-import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router";
 import { useCollection } from "../../lib/hooks/useCollection";
 import type { AppEvent, CollectionOptions, Profile } from "../../lib/types";
-import { useAppDispatch, useAppSelector } from "../../lib/stores/store";
+import { useAppDispatch } from "../../lib/stores/store";
 import { setCollectionOptions } from "../../lib/firebase/firestoreSlice";
 import { formatDateTime } from "../../lib/util/util";
 
-export default function ProfileEvents({ profile }: { profile: Profile }) {
+export default function ProfileEvents({
+  profile,
+  selectedTab,
+}: {
+  profile: Profile;
+  selectedTab: string;
+}) {
   const { data: appEvents, loading } = useCollection<AppEvent>({
     path: "events",
   });
 
   const dispatch = useAppDispatch();
-
-  const [selectedTab, setSelectedTab] = useState("future");
-
-  const tabs = [
-    { id: "future", label: "Future Events" },
-    { id: "past", label: "Past Events" },
-    { id: "hosting", label: "Hosting" },
-  ];
 
   useEffect(() => {
     const optionsMap: Record<string, CollectionOptions> = {
@@ -110,23 +107,11 @@ export default function ProfileEvents({ profile }: { profile: Profile }) {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="flex w-full flex-col h-[64vh]">
-      <div className="tabs tabs-border">
-        {tabs.map((tab) => (
-          <a
-            key={tab.id}
-            onClick={() => setSelectedTab(tab.id)}
-            className={clsx("tab", {
-              "tab-active": selectedTab === tab.id,
-            })}
-          >
-            {tab.label}
-          </a>
-        ))}
-      </div>
+    <div className="flex w-full flex-col h-[50vh]">
       <div className="grid grid-cols-3 gap-3 mt-3 overflow-y-auto">
-        {appEvents &&
-          appEvents.map((event) => (
+        {!loading && appEvents?.length === 0 && <div>No events found.</div>}
+        {!loading &&
+          appEvents?.map((event) => (
             <Link
               to={`/events/${event.id}`}
               key={event.id}
