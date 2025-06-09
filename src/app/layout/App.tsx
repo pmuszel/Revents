@@ -2,6 +2,7 @@ import { useLocation } from "react-router";
 import Navbar from "./nav/Navbar";
 import { AnimatePresence, motion } from "motion/react";
 import AnimatedOutlet from "../router/AnimatedOutlet";
+import AuthModal from "../../features/account/AuthModal";
 
 function App() {
   const location = useLocation();
@@ -21,6 +22,7 @@ function App() {
           </motion.div>
         </AnimatePresence>
       </div>
+      <AuthModal />
     </div>
   );
 }

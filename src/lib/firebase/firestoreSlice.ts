@@ -1,6 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { CollectionOptions } from "../types";
-import { stat } from "fs";
 
 type FirestoreState = {
   collection: Record<string, unknown[]>;

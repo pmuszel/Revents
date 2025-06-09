@@ -29,9 +29,7 @@ export default function EventCard({ event }: Props) {
             </figure>
             <div className="">
               <h2 className="card-title">{event.title}</h2>
-              <p className="text-sm text-neutral">
-                Hosted by {host?.displayName}
-              </p>
+              <p className="text-sm">Hosted by {host?.displayName}</p>
             </div>
           </div>
           {event.isCancelled && (
@@ -58,9 +56,12 @@ export default function EventCard({ event }: Props) {
                     Attending
                   </span>
                 )}
-              </div>
-              <div className="text-primary">
-                People you follow attending: {count}
+                {count > 0 && (
+                  <div className="badge badge-primary badge-soft">
+                    {count + " "}
+                    {count > 1 ? "people" : "person"} going that you follow
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -1,5 +1,7 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes: all;
+}
 
 @plugin "daisyui/theme" {
   name: "light";
@@ -42,7 +44,9 @@ a.active {
 
 @layer components {
   .bg-grad-primary {
-    @apply justify-center bg-gradient-to-r from-primary to-black py-2 text-white rounded-t-lg;
+    @apply justify-center bg-gradient-to-r from-primary to-black py-2 text-white;
+    border-top-right-radius: var(--radius-box);
+    border-top-left-radius: var(--radius-box);
   }
 }
 
@@ -50,5 +54,27 @@ a.active {
   width: 100% !important;
   border: none !important;
   padding: 10px;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-box) !important;
+  background-color: var(--color-base-100) !important;
+  color: var(--color-base-content) !important;
+}
+
+.react-calendar__tile {
+  background-color: var(--color-base-100) !important;
+  color: var(--color-base-content) !important;
+}
+
+.react-calendar__tile:hover {
+  background-color: var(--color-base-300) !important;
+  color: var(--color-base-content) !important;
+}
+
+.react-calendar__tile--active {
+  background-color: var(--color-primary) !important;
+  color: var(--color-base-content) !important;
+}
+
+.react-calendar__tile--active:hover {
+  background-color: var(--color-primary) !important;
+  color: var(--color-base-content) !important;
 }
