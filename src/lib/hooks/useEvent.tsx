@@ -3,6 +3,7 @@ import { useAppSelector } from "../stores/store";
 import type { AppEvent } from "../types";
 import { handleError } from "../util/util";
 import { useFirestoreActions } from "./useFirestoreActions";
+import { openAuthModal } from "../modalEvent";
 
 export const useEvent = (event: AppEvent) => {
   const { update } = useFirestoreActions({ path: "events" });
@@ -18,7 +19,7 @@ export const useEvent = (event: AppEvent) => {
   const shouldShowCountdown = eventDate > now && eventDate < oneMonthFromNow;
 
   const handleAttendanceToggle = async () => {
-    if (!currentUser) return;
+    if (!currentUser) return openAuthModal();
 
     try {
       if (isGoing) {

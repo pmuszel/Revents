@@ -16,8 +16,8 @@ export default function EventDetailedHeader({ event }: { event: AppEvent }) {
     shouldShowCountdown,
   } = useEvent(event);
   return (
-    <div className="card bg-base-100 r">
-      <figure className="h-64 rounded-lg">
+    <div className="card bg-base-100 image-full">
+      <figure className="h-64">
         <img
           className="w-full object-cover brightness-50"
           src={`/categoryImages/${event.category}.jpg`}
